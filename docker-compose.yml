@@ -1,0 +1,24 @@
+version: '3.0'
+services:
+  db:
+    image: mysql
+    volumes:
+      - myblog:/var/lib/mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    restart: always
+    ports:
+      - 3006:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: TwBGProject
+      MYSQL_DATABASE: blog
+  server:
+    build: ./
+    ports:
+      - 8080:3000
+    depends_on:
+      - db
+    env_file:
+      - ./env/.env.development
+volumes:
+  myblog:
